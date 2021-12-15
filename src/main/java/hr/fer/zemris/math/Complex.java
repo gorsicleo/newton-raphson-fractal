@@ -35,9 +35,9 @@ public class Complex {
 
     // returns this/c
     public Complex divide(Complex c) {
-        double denominator = real*real + imaginary*imaginary;
+        double denominator = c.real*c.real + c.imaginary*c.imaginary;
         double resultReal = (real*c.real+imaginary*c.imaginary)/denominator;
-        double resultImaginary = (real*c.imaginary-c.real*imaginary)/denominator;
+        double resultImaginary = (imaginary*c.real-real*c.imaginary)/denominator;
         return new Complex(resultReal,resultImaginary);
      }
 
@@ -56,11 +56,12 @@ public class Complex {
      }
     // returns this^n, n is non-negative integer
     public Complex power(int n) {
-        int count = 0;
+        int count = 1;
         
         Complex result = this;
         while (count<n){
-            result = multiply(this);
+            result = result.multiply(this);
+            count++;
         }
 
         return result;
@@ -68,14 +69,14 @@ public class Complex {
 
     // returns n-th root of this, n is positive integer
     public List<Complex> root(int n) {
-        double radius = Math.sqrt(real*real + imaginary*imaginary);
+        double radius = Math.pow(this.module(),1.0/n);
         double angle = Math.atan(imaginary/real);
 
         List<Complex> result = new ArrayList<Complex>();
 
-        for (int i=0;i<5;i++) {
-            double real = Math.pow(radius, 1/n)*Math.cos((angle+2*i*Math.PI)/n);
-            double imaginary = Math.pow(radius, 1/n)*Math.sin((angle+2*i*Math.PI)/n);
+        for (int i=0;i<12;i++) {
+            double real = radius*Math.cos((angle+2*i*Math.PI)/n);
+            double imaginary = radius*Math.sin((angle+2*i*Math.PI)/n);
             result.add(new Complex(real, imaginary));
         }
 
@@ -86,7 +87,7 @@ public class Complex {
 
     @Override
     public String toString() {
-        return "("+real+imaginary+"i)";
+        return imaginary<0? "("+real+imaginary+"i)" : "("+real+"+"+imaginary+"i)";
      }
 
      @Override
