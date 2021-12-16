@@ -14,14 +14,21 @@ public class ComplexRootedPolynomial {
 	public Complex apply(Complex z) {
 		Complex result = constant;
 		for (int i=0;i<roots.length;i++) {
-			result.multiply(z.sub(roots[i]));
+			Complex temp = z.sub(roots[i]);
+			result = result.multiply(temp);
 		}
 		return result;
 	}
 
 	// converts this representation to ComplexPolynomial type
 	public ComplexPolynomial toComplexPolynom() {
+		ComplexPolynomial poly = new ComplexPolynomial(constant);
 		
+		for (int i = 0; i < roots.length; i++) {
+			poly = poly.multiply(new ComplexPolynomial(roots[i].negate(),new Complex(1,0)));
+		}
+		
+		return poly;
 	}
 
 	@Override
@@ -29,7 +36,7 @@ public class ComplexRootedPolynomial {
 		String poly = constant.toString()+"*";
 		
 		for (Complex root : roots) {
-			poly += root.toString()+"*";
+			poly += "(z-"+root.toString()+")*";
 		}
 		return poly.substring(0, poly.length()-1);
 	}
@@ -43,7 +50,7 @@ public class ComplexRootedPolynomial {
 		
 		for (int i=0;i<roots.length;i++) {
 			double distance = Math.abs(roots[i].module()-z.module());
-			if (distance <minValue) {
+			if (distance <=minValue) {
 				minValue = distance;
 				minIndex = i;
 			}

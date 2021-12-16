@@ -26,6 +26,12 @@ public class ComplexTest {
 		c2 = new Complex(8.4, 0.1);
 
 		assertEquals(new Complex(16.900000000000002, -8.200000000000001), c1.multiply(c2));
+		
+		c1 = new Complex(1,1);
+		c2 = new Complex(2,2);
+		Complex c3 = new Complex(3,3);
+		
+		assertEquals(new Complex(-12,12),c1.multiply(c2).multiply(c3));
 	}
 
 	@Test
