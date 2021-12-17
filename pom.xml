@@ -34,5 +34,11 @@
       <version>${junit.jupiter.version}</version>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>hr.fer.zemris.java.fractals</groupId>
+      <artifactId>fractal-viewer</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
 </project>
