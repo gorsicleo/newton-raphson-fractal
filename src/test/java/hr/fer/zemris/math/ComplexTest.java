@@ -137,6 +137,8 @@ public class ComplexTest {
 		c1 = new Complex(2, -1);
 
 		assertEquals(new Complex(11753,10296), c1.power(12));
+		
+		assertEquals(new Complex(3601.3282306973288,-5358.352815787487),new Complex(1.87765,0.88858).power(12));
 	}
 
 	@Test

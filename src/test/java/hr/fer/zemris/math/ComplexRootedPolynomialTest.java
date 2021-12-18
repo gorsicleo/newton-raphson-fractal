@@ -30,6 +30,7 @@ public class ComplexRootedPolynomialTest {
 		assertEquals(7, rootedPoly.indexOfClosestRootFor(new Complex(10,10), 5.0));
 		assertEquals(0, rootedPoly.indexOfClosestRootFor(new Complex(0,0), 2.83));
 		assertEquals(-1, rootedPoly.indexOfClosestRootFor(new Complex(5,6), 0.1));
+		assertEquals(2, rootedPoly.indexOfClosestRootFor(new Complex(4.3,4.5), 1.0));
 	}
 	
 	@Test

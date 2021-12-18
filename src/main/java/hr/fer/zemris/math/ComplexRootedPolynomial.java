@@ -45,12 +45,12 @@ public class ComplexRootedPolynomial {
 	// treshold; if there is no such root, returns -1
 	// first root has index 0, second index 1, etc
 	public int indexOfClosestRootFor(Complex z, double treshold) {
-		double minValue = Math.abs(roots[0].module()-z.module());
+		double minValue = roots[0].sub(z).module();
 		int minIndex = -1;
 		
 		for (int i=0;i<roots.length;i++) {
-			double distance = Math.abs(roots[i].module()-z.module());
-			if (distance <=minValue) {
+			double distance = roots[i].sub(z).module();
+			if (distance < minValue) {
 				minValue = distance;
 				minIndex = i;
 			}
