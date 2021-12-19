@@ -15,10 +15,10 @@ import hr.fer.zemris.java.fractals.viewer.IFractalResultObserver;
 public class Newton {
 	
 	
-	public static class FractalProducerImpl implements IFractalProducer {
+	private static class FractalProducerSerialImpl implements IFractalProducer {
 		private ComplexRootedPolynomial rootedPoly;
 		
-		public FractalProducerImpl(ComplexRootedPolynomial roots) {
+		public FractalProducerSerialImpl(ComplexRootedPolynomial roots) {
 			rootedPoly = roots;
 		}
 
@@ -56,17 +56,15 @@ public class Newton {
 			
 		}
 
-		private Complex mapToComplexPlain(int x, int y, int xMin, int xMax, int yMin, int yMax, double reMin, double reMax,
-				double imMin, double imMax) {
-			double real = x / (xMax-1.0) * (reMax - reMin) + reMin;
-			double imaginary = (yMax-1.0-y) / (yMax-1) * (imMax - imMin) + imMin;
-			return new Complex(real, imaginary);
-		}
+		
 		
 	}
 
 	public static void main(String[] args) {
-
+		FractalViewer.show(new FractalProducerSerialImpl(inputRoots()));
+	}
+	
+	public static ComplexRootedPolynomial inputRoots() {
 		System.out.println("Welcome to Newton-Raphson iteration-based fractal viewer.");
 		System.out.println("Please enter at least two roots, one root per line. Enter 'done' when done.");
 
@@ -89,12 +87,12 @@ public class Newton {
 			count++;
 
 		}
+		sc.close();
 		System.out.println("Image of fractal will appear shortly. Thank you.");
 		Complex[] polynomRots = new Complex[roots.size()];
 		roots.toArray(polynomRots);
-		ComplexRootedPolynomial rootedPoly = new ComplexRootedPolynomial(new Complex(1,0),polynomRots);
-		FractalViewer.show(new FractalProducerImpl(rootedPoly));
-		sc.close();
+		
+		return new ComplexRootedPolynomial(new Complex(1,0),polynomRots);
 	}
 
 	private static Complex parseComplex(String line) {
@@ -132,5 +130,12 @@ public class Newton {
 			throw new IllegalArgumentException(
 					"Parse error: provided real and imaginary parts cannot be parsed to double.");
 		}
+	}
+	
+	public static Complex mapToComplexPlain(int x, int y, int xMin, int xMax, int yMin, int yMax, double reMin, double reMax,
+			double imMin, double imMax) {
+		double real = x / (xMax-1.0) * (reMax - reMin) + reMin;
+		double imaginary = (yMax-1.0-y) / (yMax-1) * (imMax - imMin) + imMin;
+		return new Complex(real, imaginary);
 	}
 }
