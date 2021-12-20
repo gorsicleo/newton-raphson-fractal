@@ -76,6 +76,7 @@ public class Newton {
 		System.out.printf("Root %d> ", count);
 
 		while (sc.hasNextLine()) {
+			count++;
 			System.out.printf("Root %d> ", count);
 
 			line = sc.nextLine();
@@ -84,7 +85,8 @@ public class Newton {
 				break;
 
 			roots.add(parseComplex(line));
-			count++;
+			
+			
 
 		}
 		sc.close();
@@ -105,7 +107,9 @@ public class Newton {
 		case 0:
 			return new Complex(0.0,1.0);
 		case 1:
-			real = parts[0].trim();
+			if (parts[0].equals("- ")) return new Complex(0.0,-1.0);
+			int spaceIndex = parts[0].indexOf(" ");
+			real = spaceIndex != -1? parts[0].trim().substring(0,parts[0].indexOf(" ")): parts[0].trim();
 			imaginary = "";
 			break;
 		case 2:

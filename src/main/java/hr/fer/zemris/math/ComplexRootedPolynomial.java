@@ -50,7 +50,7 @@ public class ComplexRootedPolynomial {
 		
 		for (int i=0;i<roots.length;i++) {
 			double distance = roots[i].sub(z).module();
-			if (distance < minValue) {
+			if (distance <= minValue) {
 				minValue = distance;
 				minIndex = i;
 			}
