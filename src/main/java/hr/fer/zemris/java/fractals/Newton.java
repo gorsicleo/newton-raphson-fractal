@@ -12,14 +12,14 @@ import hr.fer.zemris.java.fractals.viewer.FractalViewer;
 import hr.fer.zemris.java.fractals.viewer.IFractalProducer;
 import hr.fer.zemris.java.fractals.viewer.IFractalResultObserver;
 
-/**Class that models non-parallel computation of fractal based on Newton-Raphsons iteration.
+/**Class that models single threaded computation of fractal based on Newton-Raphsons iteration.
  * @author gorsicleo
  *
  */
 public class Newton {
 	
 	
-	/**Concrete implementation of FractalProducer calculates data for displaying fractal
+	/**Concrete implementation of FractalProducer that calculates data for displaying fractal
 	 * @author gorsicleo
 	 */
 	private static class FractalProducerSerialImpl implements IFractalProducer {

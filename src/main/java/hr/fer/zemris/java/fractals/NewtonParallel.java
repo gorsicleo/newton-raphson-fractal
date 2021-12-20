@@ -11,6 +11,10 @@ import hr.fer.zemris.math.Complex;
 import hr.fer.zemris.math.ComplexPolynomial;
 import hr.fer.zemris.math.ComplexRootedPolynomial;
 
+/**Class that models multi threaded computation of fractal based on Newton-Raphsons iteration.
+ * @author gorsicleo
+ *
+ */
 public class NewtonParallel {
 
 	private static final String TRACKS_ARGUMENT_SHORT = "-t ";
@@ -18,24 +22,42 @@ public class NewtonParallel {
 	private static final String WORKERS_ARGUMENT_SHORT = "-w ";
 	private static final String WORKERS_ARGUMENT_LONG = "--workers=";
 
+	/**Model of calculation job for one thread
+	 * @author gorsicleo
+	 */
 	public static class CalculationJob implements Runnable {
-
+	
 		public static CalculationJob NO_JOB = new CalculationJob();
+		
+		/**smallest real value of complex plane */
 		private double reMin;
+		/**biggest real value of complex plane */
 		private double reMax;
+		/**smallest imaginary value of complex plane */
 		private double imMin;
+		/**biggest imaginary value of complex plane */
 		private double imMax;
+		/**width of display */
 		private int width;
+		/**height of display */
 		private int height;
+		/**mallest y coordinate of display */
 		private int yMin;
+		/**biggest y coordinate of display */
 		private int yMax;
+		/**number of iterations */
 		private int m;
+		/**calculation data for each pixel */
 		private short[] data;
+		/**cancel flag */
 		private AtomicBoolean cancel;
+		/**user entered polynomial */
 		private ComplexRootedPolynomial poly;
 
+		/**Creates empty calculation job*/
 		public CalculationJob() {}
 		
+		/**Creates new calculation job on given parameters*/
 		public CalculationJob(double reMin, double reMax, double imMin, double imMax, int width, int height, int yMin,
 				int yMax, int m, short[] data, AtomicBoolean cancel, ComplexRootedPolynomial poly) {
 			super();
@@ -61,7 +83,9 @@ public class NewtonParallel {
 	}
 
 	
-	
+	/**Concrete implementation of FractalProducer that calculates data for displaying fractal
+	 * @author gorsicleo
+	 */
 	private static class FractalProducerParallelImpl implements IFractalProducer {
 		
 		private static final String CALCULATION_FINISHED_MESSAGE = "Racunanje gotovo. Idem obavijestiti promatraca tj. GUI!";
@@ -70,6 +94,10 @@ public class NewtonParallel {
 		private int numberOfWorkers;
 		private int numberOfJobs;
 
+		/**Constructs new FractalProducer with given user entered roots and parallelization arguments
+		 * @param roots
+		 * @param args
+		 */
 		public FractalProducerParallelImpl(ComplexRootedPolynomial roots, int[] args) {
 			rootedPoly = roots;
 			numberOfWorkers = args[0];
@@ -105,6 +133,9 @@ public class NewtonParallel {
 
 		}
 
+		/**Joins all workers
+		 * @param workers to be joined
+		 */
 		private void waitForAllWorkersToFinish(Thread[] workers) {
 			for (int i = 0; i < workers.length; i++) {
 				while (true) {
@@ -117,6 +148,10 @@ public class NewtonParallel {
 			}
 		}
 
+		/**Puts job to blocking queue for each worker
+		 * @param queue
+		 * @param workers
+		 */
 		private void putToQueue(final BlockingQueue<CalculationJob> queue, Thread[] workers) {
 			for (int i = 0; i < workers.length; i++) {
 				while (true) {
@@ -129,6 +164,7 @@ public class NewtonParallel {
 			}
 		}
 
+		/**Constructs new {@link CalculationJob} and puts job to queue*/
 		private void createJobForEachWorker(double reMin, double reMax, double imMin, double imMax, int width,
 				int height, AtomicBoolean cancel, int iteartions, short[] data, final int tracks, int yPerTrack,
 				final BlockingQueue<CalculationJob> queue) {
@@ -151,6 +187,7 @@ public class NewtonParallel {
 			}
 		}
 
+		/**Creates array of workers and job is given to each one of them.*/
 		private Thread[] createAndStartWorkers(final BlockingQueue<CalculationJob> queue) {
 			
 			Thread[] workers = new Thread[numberOfWorkers];
@@ -183,6 +220,10 @@ public class NewtonParallel {
 		
 	}
 
+	/**Parses console arguments for parallelization arguments
+	 * @param args for parsing
+	 * @return parallelization arguments (numberOfWorkers, numberOfTracks)
+	 */
 	public static int[] parseArgs(String[] args) {
 
 		return new int[]{handleNumberOfWorkers(args),handleNumberOfTracks(args)};
@@ -229,6 +270,9 @@ public class NewtonParallel {
 		FractalViewer.show(new FractalProducerParallelImpl(Newton.inputRoots(), parseArgs(args)));
 	}
 
+	/**Method takes in parameters for display width and height and edges of complex plane (reMin, reMax, imMin, imMax)
+	 * and calculates part of fractal.
+	 */
 	public static void calculate(double reMin, double reMax, double imMin, double imMax, int width, int height, int m,
 			int yMin, int yMax, short[] data, AtomicBoolean cancel, ComplexRootedPolynomial rootedPoly) {
 
