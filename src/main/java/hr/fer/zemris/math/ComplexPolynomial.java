@@ -3,21 +3,30 @@ package hr.fer.zemris.math;
 import java.util.Arrays;
 import java.util.List;
 
+/**Models complex polynomial.
+ * @author gorsicleo
+ *
+ */
 public class ComplexPolynomial {
-	// ...
+	
+	/**List of polynomial coefficients*/
 	private List<Complex> coef;
 
-	// constructor
+	/**Constructs new polynomial with given list of coefficients*/
 	public ComplexPolynomial(Complex... factors) {
 		coef = List.of(factors);
 	}
 
-	// returns order of this polynom; eg. For (7+2i)z^3+2z^2+5z+1 returns 3
+	/**Returns biggest polynomial exponent. For (7+2i)z^3+2z^2+5z+1 returns 3*/
 	public short order() {
 		return (short) (coef.size() - 1);
 	}
 
-	// computes a new polynomial this*p
+	
+	/**Multiplies two polynomials
+	 * @param p another polynomial 
+	 * @return ComplexPolynomial result of multiplication
+	 */
 	public ComplexPolynomial multiply(ComplexPolynomial p) {
 		Complex[] poly = new Complex[coef.size()-1 + p.coef.size()-1+1];
 		Arrays.fill(poly,new Complex());
@@ -32,8 +41,11 @@ public class ComplexPolynomial {
 		return new ComplexPolynomial(poly);
 	}
 
-	// computes first derivative of this polynomial; for example, for
-	// (7+2i)z^3+2z^2+5z+1 returns (21+6i)z^2+4z+5
+
+	/**computes first derivative of this polynomial. 
+	 * for example, for // (7+2i)z^3+2z^2+5z+1 returns (21+6i)z^2+4z+5
+	 * @return ComplexPolynomial first derivative
+	 */
 	public ComplexPolynomial derive() {
 		Complex[] poly = new Complex[coef.size()-1];
 		for (int i = 0; i < coef.size()-1; i++) {
@@ -42,7 +54,10 @@ public class ComplexPolynomial {
 		return new ComplexPolynomial(poly);
 	}
 
-	// computes polynomial value at given point z
+	/**computes polynomial value at given point z
+	 * @param z point for evaluating polynomial
+	 * @return
+	 */
 	public Complex apply(Complex z) {
 		Complex result = coef.get(0);
 
@@ -56,6 +71,7 @@ public class ComplexPolynomial {
 		return result;
 	}
 
+	/**Returns string representation of polynomial in form of ...+[coef]*z^[exp]+....*/
 	@Override
 	public String toString() {
 		String result = String.format("%s*z^%d+",coef.get(coef.size()-1),coef.size()-1);
